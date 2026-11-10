@@ -135,10 +135,50 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .rus u{text-decoration-thickness:2px;text-underline-offset:3px}.rus u.ck{text-decoration-style:double}.rus u.dp{text-decoration-style:dotted}.rus u.op{text-decoration-style:wavy}.rus u.ob{text-decoration-style:dashed}
 .rleg{margin:10px 0 0;font-size:14px;line-height:2.2}.rleg summary{cursor:pointer;color:var(--mute);font-weight:700}.rleg .mp,.rleg .mk,.rleg .ms,.rleg .me{display:inline-block}
 .rus .wl{display:inline-flex;flex-direction:column;vertical-align:bottom;text-align:center;line-height:1.25;margin:0 2px}.rus .wl small{font-size:.58em;font-weight:700;color:var(--hot);white-space:normal;max-width:11em;line-height:1.1}.rus .wl>span{white-space:nowrap}.rus .il{font-weight:800;color:var(--acc)}
+.dl{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:40;display:flex;align-items:center;gap:6px;font:700 13px Manrope,system-ui,sans-serif;color:var(--mute);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:9px 14px;opacity:.85;cursor:pointer}
+.dl:hover,.dl:active{opacity:1;color:var(--ink)}
+.dlov{position:fixed;inset:0;z-index:80;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch}
+.dlov[hidden]{display:none}
+.dlbox{max-width:640px;margin:0 auto;padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(40px + env(safe-area-inset-bottom,0px))}
+.dlhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.dlhead h2{font-size:22px;font-weight:800}
+.dlx{width:42px;height:42px;border-radius:50%;border:2px solid var(--line);background:var(--card);color:var(--acc);font-size:18px;cursor:pointer}
+.dlsub{color:var(--mute);margin:0 0 14px}
+.dltabs{display:flex;gap:8px;margin-bottom:16px}
+.dltabs button{flex:1;padding:10px;border-radius:12px;border:2px solid var(--line);background:var(--card);color:var(--ink);font:700 14px Manrope,system-ui,sans-serif;cursor:pointer}
+.dlcard{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:18px;margin-bottom:14px;scroll-margin-top:12px}
+.dlcard h3{font:800 16px Unbounded,system-ui,sans-serif;margin:0 0 6px}
+.dlcard p,.dlcard ol{color:var(--mute);font-size:15px;margin:0 0 12px}
+.dlcard ol{padding-left:20px}.dlcard li{margin-bottom:4px}
+.dlcard a:not(.dlbtn){color:var(--acc);font-weight:700}
+.dlbtn{display:block;text-align:center;text-decoration:none;font:700 16px Manrope,system-ui,sans-serif;padding:14px 16px;border-radius:12px;border:2px solid var(--acc);background:var(--hot);color:var(--hotink)}
+.dlbtn:active{transform:scale(.98)}
 </style>
 </head>
 <body>
 <main id="app"></main>
+<div class="dlov" id="dlov" hidden>
+  <div class="dlbox">
+    <div class="dlhead"><h2>Скачать ГДЗ</h2><button class="dlx" id="dlx" aria-label="Закрыть">✕</button></div>
+    <p class="dlsub">Скачай один раз, и ГДЗ будет открываться без интернета.</p>
+    <div class="dltabs"><button data-go="dl-android">Android</button><button data-go="dl-ios">iOS</button></div>
+    <section class="dlcard" id="dl-android">
+      <h3>Скачать на Android</h3>
+      <p>Файл сохранится на телефон, и ГДЗ можно будет открывать в любое время без интернета, даже если связь пропала или интернет глушат.</p>
+      <a class="dlbtn dlfile" download="ГДЗ_5-11_классы.html" href="#">Скачать на Android</a>
+    </section>
+    <section class="dlcard" id="dl-ios">
+      <h3>Скачать на iOS</h3>
+      <p>На iPhone файл открывается через бесплатное приложение HTML Viewer. Один раз настроишь, и ГДЗ будет работать без интернета.</p>
+      <ol>
+        <li>Нажми кнопку ниже и установи HTML Viewer из App Store.</li>
+        <li>Скачай файл с ГДЗ: <a class="dlfile" download="ГДЗ_5-11_классы.html" href="#">скачать файл</a>.</li>
+        <li>Открой файл через «Поделиться» → HTML Viewer.</li>
+      </ol>
+      <a class="dlbtn" href="https://apps.apple.com/app/id810042973">Скачать для iOS</a>
+    </section>
+  </div>
+</div>
 <script>
 var ORAL={5:["История","Биология","География","Физкультура","Литература (пересказы)"],6:["История","Биология","География","Обществознание","Физкультура","Литература (пересказы)"]};
 var oralBase=["История","Биология","География","Обществознание","ОБЖ","Физкультура","Литература (пересказы)"];
@@ -1170,7 +1210,9 @@ var SCENE='<div class="scene"><svg viewBox="0 0 400 230" aria-hidden="true"><def
 function lobby(){
   var h='<h1>ГДЗ</h1><p class="sub">Выбери класс</p><div class="grid">';
   for(var g=5;g<=11;g++)h+='<button class="grade"'+(g==11?' style="grid-column:2;grid-row:3"':'')+' data-g="'+g+'"><b>'+g+'</b><span>класс</span></button>';h+='<button class="grade mini" style="grid-column:1;grid-row:3" data-m="m56"><b>5–6</b><span>вместе</span></button><button class="grade mini" style="grid-column:3;grid-row:3" data-m="m79"><b>7–9</b><span>вместе</span></button>';
-  app.innerHTML=h+'</div>'+SCENE+SCENE_DAY+SCENE_SUN+GEAR+BMUI;initSet();initBMUI();
+  var DL='<button class="dl" id="dlb" type="button" aria-label="Скачать">⬇ Скачать</button>';
+function initDL(){var o=document.getElementById("dlov"),b=document.getElementById("dlb");if(!o||!b)return;var u=location.href.split("#")[0].split("?")[0];o.querySelectorAll(".dlfile").forEach(function(l){l.href=u});b.onclick=function(){o.hidden=false;o.scrollTop=0};document.getElementById("dlx").onclick=function(){o.hidden=true};o.querySelectorAll("[data-go]").forEach(function(t){t.onclick=function(){var e=document.getElementById(t.dataset.go);if(e)e.scrollIntoView({behavior:"smooth",block:"start"})}})}
+  app.innerHTML=h+'</div>'+SCENE+SCENE_DAY+SCENE_SUN+GEAR+BMUI+DL;initSet();initBMUI();initDL();
   app.querySelectorAll(".grade:not(.mini)").forEach(function(b){b.onclick=function(){grade(+b.dataset.g)}});app.querySelectorAll(".mini").forEach(function(b){b.onclick=function(){combined(b.dataset.m)}});
   window.scrollTo(0,0);
 }
